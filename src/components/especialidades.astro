@@ -1,0 +1,30 @@
+---
+import { getCollection } from "astro:content";
+import ContentSection from "~/components/content-section.astro";
+import Modal from "./modal.astro";
+
+const modals = await getCollection(
+  "showcase",
+  ({ data }) => "featured" in data,
+);
+
+const modalsOrdenados = modals.sort(
+  (a, b) => a.data.featured! - b.data.featured!,
+);
+---
+
+<ContentSection title="Nuestras especialidades" id="especialidades">
+  <h4 class="max-w-xl text-center text-2xl">
+    ¡Pulsa en las imagenes para ver <span class="text-primary">algunos de nuestros vídeos!</span>
+  </h4>
+  <div class="max-w-6xl space-y-2 md:w-full">
+    <div class="grid grid-cols-1 gap-2 md:grid-cols-4">
+      {modalsOrdenados.map((modal) => <Modal modal={modal.data} />)}
+    </div>
+    <p class="text-right text-sm">
+      <a class="text-primary" href="https://www.instagram.com/jardineriaavidal">
+        ...y más en nuestro Instagram &rarr;
+      </a>
+    </p>
+  </div>
+</ContentSection>

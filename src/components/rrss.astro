@@ -1,0 +1,55 @@
+---
+const { itemsPerCol = 4, itemsPerColSm = 4, color } = Astro.props;
+
+import { Icon } from "astro-icon/components";
+import type { Social } from "~/types";
+
+const links: Array<Social> = [
+  {
+    url: "https://www.instagram.com/jardineriaavidal",
+    description: "Nuestro instagram",
+    icon: "fa-brands:instagram",
+  },
+  {
+    url: "https://www.facebook.com/jardineriavidal.vidalberbegal",
+    description: "Nuestro facebook",
+    icon: "fa-brands:facebook",
+  },
+  {
+    url: "tel:+34678567876",
+    description: "Nuestro teléfono",
+    icon: "mdi:phone",
+  },
+  {
+    url: "https://maps.app.goo.gl/FxnU8ZWKQ29Dz5Pr9",
+    description: "Nuestra ubicación",
+    icon: "mdi:google-maps",
+  },
+];
+---
+
+<ul class=`relative grid grid-cols-${itemsPerCol} gap-4 sm:grid-cols-${itemsPerColSm}`>
+  {
+    links.map((link) => (
+      <li class={color}>
+        <a
+          class="flex size-16 items-center justify-center rounded-full border-2 border-current p-4"
+          href={link.url}
+        >
+          <span class="sr-only">{link.description}</span>
+          <Icon class="size-full" name={link.icon} />
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+</style>

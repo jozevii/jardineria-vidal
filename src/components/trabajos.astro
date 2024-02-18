@@ -1,0 +1,40 @@
+---
+import ContentSection from "~/components/content-section.astro";
+import { Image } from "astro:assets";
+import { getCollection } from "astro:content";
+
+const trabajos = await getCollection( "trabajos", () => true);
+
+const trabajosOrdenados = trabajos.sort(
+  (a, b) => a.data.orden! - b.data.orden!,
+);
+
+---
+
+<ContentSection title="Algunos de nuestros trabajos" id="trabajos">
+  <div class="max-w-6xl w-full sm:grid grid-cols-10 gap-2">
+    {trabajosOrdenados.map((trabajo) => 
+    <div class=`col-span-${trabajo.data.tamanyo} h-48 py-2 sm:py-0`>
+      <Image
+        class="w-full h-full aspect-video object-cover position-jardineria rounded"
+        src={trabajo.data.imagen}
+        loading="eager"
+        alt={trabajo.data.titulo}
+      />
+    </div>
+    )}
+  </div>
+</ContentSection>
+
+<style>
+  .col-span-3 {
+    grid-column: span 3 / span 3;
+  }
+
+  .col-span-4 {
+    grid-column: span 4 / span 4;
+  }
+  .col-span-6 {
+    grid-column: span 6 / span 6;
+  }
+</style>

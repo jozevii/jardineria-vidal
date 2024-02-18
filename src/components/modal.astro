@@ -1,0 +1,110 @@
+---
+const { modal } = Astro.props;
+
+import { Image } from "astro:assets";
+---
+
+<modal-video data-id={modal.idCss}>
+  <button id=`open-${modal.idCss}`>
+    <a class="group aspect-video hover:!text-primary">
+      <figure class="relative h-full w-full overflow-hidden">
+        <Image
+          class="h-full w-full rounded bg-cover object-cover transition-all duration-300 group-hover:scale-110 group-hover:opacity-20 group-focus:scale-110 group-focus:opacity-20"
+          src={modal.image}
+          alt={modal.titulo}
+        />
+        <figcaption class="absolute inset-0">
+          <div
+            class="flex h-full flex-col items-center justify-center gap-2 opacity-0 transition-all duration-300 group-hover:opacity-100 group-focus:opacity-100">
+            <h3 class="px-4 text-center font-extrabold uppercase text-xl">
+              {modal.titulo}
+            </h3>
+          </div>
+        </figcaption>
+      </figure>
+    </a>
+  </button>
+  <dialog id=`modal-${modal.idCss}` class="fixed top-0 left-0 w-full h-full bg-transparent hidden justify-center items-center">
+    <slot name="main" />
+    <svg class="absolute" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><style>.spinner_P7sC{transform-origin:center;animation:spinner_svv2 .75s infinite linear}@keyframes spinner_svv2{100%{transform:rotate(360deg)}}</style><path d="M10.14,1.16a11,11,0,0,0-9,8.92A1.59,1.59,0,0,0,2.46,12,1.52,1.52,0,0,0,4.11,10.7a8,8,0,0,1,6.66-6.61A1.42,1.42,0,0,0,12,2.69h0A1.57,1.57,0,0,0,10.14,1.16Z" class="spinner_P7sC"/></svg>
+    <video
+      class="w-95 sm:w-88 border rounded-md sm:h-full z-10"
+      id=`video-${modal.idCss}`
+      class="video-js "
+      controls
+      preload="none"
+      
+      data-setup="{}">
+      <source src=`./src/assets/videos/video${modal.featured}.mp4` type="video/mp4" />
+      <p class="vjs-no-js">
+        Actualiza tu navegador para visualizar este contenido
+      </p>
+    </video>
+  </dialog>
+</modal-video>
+
+<style lang="scss">
+  /* Configuración imposible de incluir con Tailwind */
+  dialog:-internal-dialog-in-top-layer::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  img {
+    aspect-ratio: 1;
+  }
+</style>
+
+<script>
+  class Modal extends HTMLElement {
+    constructor() {
+      super();
+
+      const idCss = this.dataset.id;
+
+      const dialog = document.getElementById(`modal-${idCss}`);
+      const video = document.getElementById(`video-${idCss}`);
+      const buttonOpen = this.querySelector(`#open-${idCss}`);
+
+      // Inicializar Modal cerrado
+      cerrarModal();
+
+      // Cuando pulsas la imagen se abre el modal
+      buttonOpen.addEventListener("click", () => {
+        abrirModal()
+      });
+
+      // Cuando pulsas fuera del modal se cierra el modal
+      document.addEventListener("click", function (event) {
+        if (dialog && video && !video.contains(event.target)) {
+          cerrarModal()
+        }
+      }); 
+
+      // Cuando pulsas atrás o adelande en el navegador se cierra el modal
+      window.addEventListener("popstate", () => {
+        if (dialog instanceof HTMLDialogElement) {    
+          cerrarModal()
+        }
+      });
+
+      function cerrarModal() {
+        dialog.classList.remove("flex");
+        dialog.classList.add("hidden");
+        document.body.classList.remove("overflow-hidden");
+        video.pause();
+        dialog.close();
+      }
+
+      function abrirModal() {
+        document.body.classList.add("overflow-hidden");
+        dialog.classList.remove("hidden");
+        dialog.classList.add("flex");
+        dialog.showModal();
+        video.play();
+        event.stopPropagation();
+      }
+    }
+  }
+
+  customElements.define("modal-video", Modal);
+</script>

@@ -1,0 +1,30 @@
+---
+export interface Props {
+  id: string;
+  title: string;
+}
+
+const { title, id } = Astro.props;
+---
+
+<section
+  id={id}
+  class="flex scroll-mt-24 flex-col items-center gap-4 space-y-1"
+>
+  <div class="flex flex-col items-center gap-4">
+    <slot name="eyebrow" />
+    <h2
+      class="bg-gradient-to-r from-yellow-400 via-green-400 to-green-600 bg-clip-text text-transparent text-center text-6xl"
+    >
+      {title}
+    </h2>
+  </div>
+  
+  <slot />
+</section>
+
+<style>
+  h2 {
+    font-family: "Arvo", serif;
+  }
+</style>

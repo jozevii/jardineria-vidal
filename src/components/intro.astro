@@ -1,0 +1,35 @@
+---
+import { Icon } from "astro-icon/components";
+import { Image } from "astro:assets";
+import jardineriaImagen from "~/assets/jardineria.webp";
+import ContentSection from "~/components/content-section.astro";
+---
+
+<ContentSection title="Jardineria Vidal" id="intro">
+  <Icon slot="eyebrow" name="logomark" class="size-32 text-primary" />
+  <div class="grid md:grid-cols-2 gap-4 max-w-6xl">
+    <div class="relative aspect-w-16 aspect-h-10 overflow-hidden rounded">
+      <Image
+      class="w-full h-full aspect-video object-cover position-jardineria"
+      src={jardineriaImagen}
+      loading="eager"
+      alt="A floating astronaut in a space suit"
+    />
+    </div>
+    <div class="md:text-left text-center flex items-center">
+      <p class="text-center text-offset">
+        Embellece tu hogar con nuestra <span class="text-primary">jardinería a domicilio</span>
+        y trabajos artesanales en madera. Desde el diseño de 
+        jardines personalizados hasta muebles únicos y artesanales, 
+        ofrecemos <span class="text-primary">soluciones que fusionan naturaleza y artesanía.</span>
+        Descubre la magia de un espacio exterior único con la calidez de la madera. 
+      </p>
+    </div> 
+  </div>
+</ContentSection>
+
+<style>
+  .position-jardineria {
+    object-position: 0 25%;
+  }
+</style>
